@@ -14,7 +14,7 @@ Load the extension into Chrome by going to settings, Extensions , enable Develop
 Alpha
 ==============
 
-We are in a pre alpha stage, it's still not safe for use,  please do not use other than for development purposes at this time.
+We are in alpha stage, it's still not safe for use,  please do not use other than for development purposes at this time.
 
 
 Development
