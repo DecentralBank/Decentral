@@ -19,15 +19,22 @@ function SendController($scope,modals,$rootScope,Wallet,WalletManager){
 
 
     $scope.send = function(item) {
-    	var satoshies=100000000;
-		var formData ={
-		addr:$scope.inputAddress,
-		amount:$scope.inputAmount*satoshies,
-		}
-		modals.password();
-		console.log(formData);
-		WalletManager.getCurrentWallet().buildTransaction(formData,function(data){
-		console.log(data);
-		});  
+    	var success = function() {
+			var satoshies=100000000;
+			var formData ={
+				addr:$scope.inputAddress,
+				amount:$scope.inputAmount*satoshies,
+			}
+			console.log(formData);
+			WalletManager.getCurrentWallet().buildTransaction(formData,function(data){
+				console.log(data);
+			});
+		};
+		modals.open("modalpassword", {
+			"message":"Please input password",
+			"databaseName":"password",
+			"objectName":"password"
+		}, success);
+		
     };  
 }
