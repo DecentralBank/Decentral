@@ -1,6 +1,6 @@
 "use strict";
-cApp.controller("HomeController", ["$scope", "$rootScope", "Blockchaininfo", "DecentralStorage", "Encryption", "modals", "Security", "Wallet", "WalletManager",
-function($scope,$rootScope, Blockchaininfo,DecentralStorage, Encryption, modals, Security, Wallet, WalletManager) {
+cApp.controller("HomeController", ["$scope", "$rootScope", "Blockchaininfo", "DecentralStorage", "Encryption", "modals","Session", "Security", "Wallet", "WalletManager",
+function($scope,$rootScope, Blockchaininfo,DecentralStorage, Encryption, modals, Session, Security, Wallet, WalletManager) {
 	
 	/*******************Home init*********************/
     $scope.pageClass = "page-home";
@@ -19,6 +19,7 @@ function($scope,$rootScope, Blockchaininfo,DecentralStorage, Encryption, modals,
 		var el = document.getElementById("first");
 		angular.element(el).triggerHandler("click");
     },0);
+	
     /*******************Home init end*****************/
 	
 	/***

@@ -78,10 +78,22 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 			return this.Balance;
 		};
 
-		this.updateBalance=function(balance) {
-			this.blockchain.multiAddr(this.getAllAddresses,function(result){
-			this.Balance=result;
-			});
+		this.updateBalance=function() {
+			this.Balance = 0;
+			var arr = [];
+			var tot = 0;
+			for(var i = 0; i < this.Addresses.length; i++) {
+				arr.push(this.Addresses[i]);
+				tot += this.Addresses[i].length;
+				if(tot > 1500 || i == this.Addresses.length-1)
+				{
+					this.blockchain.multiAddr(arr.slice(0),	function(result){
+						this.Balance += result;
+					});
+					tot = 0;
+					arr = [];
+				}
+			}
 		};
 
 		console.log('Wallet instantiated'+Name);
@@ -118,6 +130,8 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 		var bookEntry ={};
 		newAddress["address"] = hash;
 		bookEntry[hash]= Encryption.encrypt(key.toWIF(),passphrase);
+		console.log("private key " + key.toWIF());
+		console.log("public key " + hash);
 		console.log(bookEntry)
 		this.Addresses.push(newAddress);
 		this.Book.push(bookEntry);
