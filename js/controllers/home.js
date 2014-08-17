@@ -8,9 +8,7 @@ function($scope,$rootScope, Blockchaininfo,DecentralStorage, Encryption, modals,
     $scope.curWallet = WalletManager.getCurrentWallet();
 	$scope.wallets = WalletManager.getWallets();
 	$rootScope.curWallet = $scope.curWallet;
-    $rootScope.$watch( "balance", function() {
-		$scope.balance = $rootScope.balance/100000000;
-    })
+
     var backupFile;
 	$scope.currentAddress = "1Yj564jDqoB6L7hg5ETYKhqRsB65WrWPB";
 	$scope.isActive = true;
@@ -19,6 +17,11 @@ function($scope,$rootScope, Blockchaininfo,DecentralStorage, Encryption, modals,
 		var el = document.getElementById("first");
 		angular.element(el).triggerHandler("click");
     },0);
+	
+	setInterval(function() {
+		$scope.curWallet.updateBalance();
+		$scope.Balance = $rootScope.Balance = $scope.curWallet.getBalance();
+	}, 30000);
 	
     /*******************Home init end*****************/
 	
