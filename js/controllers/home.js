@@ -18,10 +18,18 @@ function($scope,$rootScope, Blockchaininfo,DecentralStorage, Encryption, modals,
 		angular.element(el).triggerHandler("click");
     },0);
 	
-	setInterval(function() {
+	/***
+	updateBalance will work properly but only 30 seconds later since it is a callback.
+	***/
+	var updateBalance = function() {
 		$scope.curWallet.updateBalance();
-		$scope.Balance = $rootScope.Balance = $scope.curWallet.getBalance();
-	}, 30000);
+		//setTimeout(function() {
+			$scope.Balance = $rootScope.Balance = $scope.curWallet.getBalance();
+			console.log("Balance " + $scope.Balance);
+		//}, 1000);
+	};
+	updateBalance();
+	setInterval(updateBalance, 30000);
 	
     /*******************Home init end*****************/
 	

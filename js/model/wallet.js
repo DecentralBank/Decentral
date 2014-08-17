@@ -80,15 +80,22 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 
 		this.updateBalance=function() {
 			this.Balance = 0;
+			var Balance = this.Balance;
 			var arr = [];
 			var tot = 0;
 			for(var i = 0; i < this.Addresses.length; i++) {
-				arr.push(this.Addresses[i]);
-				tot += this.Addresses[i].length;
+				arr.push(this.Addresses[i].address);
+				tot += this.Addresses[i].address.length;
 				if(tot > 1500 || i == this.Addresses.length-1)
 				{
-					this.blockchain.multiAddr(arr.slice(0),	function(result){
-						this.Balance += result;
+					//console.log(arr.slice(0));
+					Blockchaininfo.multiAddr(arr.slice(0),	function(result){
+						//console.log(result.addresses);
+						for(var j = 0; j < result.addresses.length; j++)
+						{
+							//console.log(result.addresses[j].final_balance);
+							Balance += result.addresses[j].final_balance;
+						}		
 					});
 					tot = 0;
 					arr = [];
