@@ -3,7 +3,7 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 
 
 	var Wallet = function(Name) {
-
+		var self = this;
 		this.Assets=[];
 		this.Name=Name;
 		this.Addresses=[];
@@ -46,6 +46,10 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 			this.Addresses.push(address);
 		};
 
+		this.getAddress = function(ind) {
+			return this.Addresses[ind];
+		};
+		
 		this.getCurrentAddress = function(){
 			return CurrentAddress;
 		};
@@ -71,16 +75,31 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 		};
 
 		this.setBalance = function(balance){
-			Balance = balance;
+			this.Balance = balance;
 		};
 
 		this.getBalance = function() {
 			return this.Balance;
 		};
 
-		this.updateBalance=function() {
+		var update = function(adr, sind) {
+			
+			Blockchaininfo.multiAddr(adr, function(result) {
+				var balanceAcc = self.getBalance();
+				for(var j = 0; j < result.addresses.length; j++)
+				{
+					var final_balance = result.addresses[j].final_balance;
+					balanceAcc += final_balance;
+					//var si = sind + j;
+					//console.log(sind + " " + j + " " + self.getAddress(sind + j));
+					self.getAddress(sind + j)["balance"] = final_balance;
+				}
+				self.setBalance(balanceAcc);
+			});
+		};
+		
+		this.updateBalance = function() {
 			this.Balance = 0;
-			var Balance = this.Balance;
 			var arr = [];
 			var tot = 0;
 			for(var i = 0; i < this.Addresses.length; i++) {
@@ -88,15 +107,7 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 				tot += this.Addresses[i].address.length;
 				if(tot > 1500 || i == this.Addresses.length-1)
 				{
-					//console.log(arr.slice(0));
-					Blockchaininfo.multiAddr(arr.slice(0),	function(result){
-						//console.log(result.addresses);
-						for(var j = 0; j < result.addresses.length; j++)
-						{
-							//console.log(result.addresses[j].final_balance);
-							Balance += result.addresses[j].final_balance;
-						}		
-					});
+					update(arr.slice(0), i - arr.length + 1);
 					tot = 0;
 					arr = [];
 				}
@@ -106,7 +117,7 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 		console.log('Wallet instantiated'+Name);
 	};
 
-	Wallet.prototype.loadWallet= function(callback){
+	Wallet.prototype.loadWallet = function(callback) {
 		var _name=this.Name;
 		var walletData=[]
 		var _addresses=this.getAddresses();
@@ -145,7 +156,7 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 		return hash;
 	}
     
-	Wallet.prototype.utxofetcher=function(Addresses, callback){
+	Wallet.prototype.utxofetcher = function(Addresses, callback) {
 		//  var addresses  = this.getAddresses(), 
 		var _blockchain=Blockchaininfo;
 		_blockchain.getUnspent(Addresses,function(data){
@@ -193,8 +204,11 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
 	}
   
  //TODO: make sure that sign function uses all selected private addresses in order
-  Wallet.prototype.buildTransaction= function(formData,callback){
-     //retrieve all addresses with unspent outputs no more addresses than required for balance
+  Wallet.prototype.buildTransaction= function(formData,callback) {
+     var tx = new Bitcoin.Transaction()
+	 
+	 //retrieve all addresses with unspent outputs no more addresses than required for balance
+	 /*for(
      var unspentAddresses = this.selectUnspentAddresses(this.getAddresses(),formData.amount);
      //retrieve all private keys from addresses with balances
      var key = this.retrievePvtKeys(unspentAddresses);
@@ -207,7 +221,7 @@ cApp.factory("Wallet",["Blockchaininfo","DecentralStorage","Encryption",function
      return tx.toHex();
       });
      //change address
- 
+ */
   }//end build transaction
 
   function addInput(tx,unspent_output) {
