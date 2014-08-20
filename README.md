@@ -8,6 +8,8 @@ A Bitcoin Colored Coins Wallet
 Setup
 ===========
 
+Install Bower Dependencies **Bower Install**
+Install Node dependencies **nodejs install -d**
 Load the extension into Chrome by going to settings, Extensions , enable Development mode and clicking the "load unpackaged extension button".
 
 
