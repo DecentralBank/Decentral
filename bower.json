@@ -12,13 +12,13 @@
   ],
   "license": "MIT",
   "private": true,
- "dependencies": {
+  "dependencies": {
     "mnemonic.js": "~1.0.0",
     "bitcoinjs-lib": "git://github.com/bitcoinjs/bitcoinjs-lib#master",
     "angular": "~1.2.13",
     "angular-route": "~1.2.14",
-    "highcharts-ng":"0.0.6",
-    "numeral":"1.5.3"
-
+    "highcharts-ng": "0.0.6",
+    "numeral": "1.5.3",
+    "angular-qrcode": "monospaced/angular-qrcode#~4.0.0"
   }
 }
