@@ -1,4 +1,4 @@
 # Ignore node_modules
 node_modules/
 # Ignore bower_components
-bower_components/**
+.bower_components/
